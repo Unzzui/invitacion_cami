@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Feliz Día de la Madre & Día de la Enfermería!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&family=Dancing+Script:wght@700&display=swap');
+    :root{
+      --primary:#ff6b9a;
+      --secondary:#ffb6c1;
+      --bg:#fff9fb;
+      --text:#333;
+      --accent:#ff4d82;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      background:var(--bg);
+      font-family:'Roboto', sans-serif;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+    
+    /* Loading Screen */
+    .loading-screen {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:var(--bg);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:1000;
+      transition:opacity 0.8s, visibility 0.8s;
+    }
+    
+    .envelope {
+      width:200px;
+      height:120px;
+      background:#f8f8f8;
+      border-radius:10px;
+      position:relative;
+      box-shadow:0 10px 25px rgba(0,0,0,0.15);
+      animation:float 2s infinite ease-in-out;
+      margin-bottom:30px;
+    }
+    
+    .envelope:before {
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:0;
+        height:0;
+        border-left:100px solid transparent;
+        border-right:100px solid transparent;
+        border-top:70px solid var(--primary);
+        transform-origin:top;
+        transition:transform 0.4s;
+        box-sizing:border-box;
+      }
+    
+    .envelope:hover:before {
+      transform:rotateX(180deg);
+    }
+    
+    .envelope:after {
+      content:'❤';
+      font-size:30px;
+      color:var(--accent);
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform:translateY(0); }
+      50% { transform:translateY(-10px); }
+    }
+    
+    .open-btn {
+      background:var(--primary);
+      color:#fff;
+      font-size:1.2rem;
+      border:none;
+      border-radius:2rem;
+      padding:1rem 2rem;
+      cursor:pointer;
+      font-weight:bold;
+      transition:all 0.3s;
+      box-shadow:0 5px 15px rgba(255,107,154,0.4);
+    }
+    
+    .open-btn:hover {
+      transform:scale(1.05);
+      box-shadow:0 7px 20px rgba(255,107,154,0.6);
+    }
+    
+    /* Main Card */
+    .card{
+      background:#fff;
+      width:90%;
+      max-width:500px;
+      border-radius:1.5rem;
+      box-shadow:0 10px 25px rgba(0,0,0,0.1);
+      text-align:center;
+      padding:2rem;
+      animation:fadeIn 1s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .card:before {
+      content:'';
+      position:absolute;
+      width:150px;
+      height:150px;
+      background:radial-gradient(circle, var(--secondary) 10%, transparent 70%);
+      top:-50px;
+      right:-50px;
+      opacity:0.4;
+      border-radius:50%;
+    }
+    
+    .card:after {
+      content:'';
+      position:absolute;
+      width:120px;
+      height:120px;
+      background:radial-gradient(circle, var(--secondary) 10%, transparent 70%);
+      bottom:-40px;
+      left:-40px;
+      opacity:0.4;
+      border-radius:50%;
+    }
+    
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px);} 
+      to{opacity:1;transform:translateY(0);} 
+    }
+    
+    h1{
+      font-family:'Dancing Script', cursive;
+      color:var(--primary);
+      margin-bottom:1rem;
+      font-size:2.5rem;
+      text-shadow:1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    h2{
+      color:var(--primary);
+      margin-top:1.5rem;
+    }
+    
+    p{
+      color:var(--text);
+      margin:0.8rem 0;
+      line-height:1.5;
+    }
+    
+    .heart-divider {
+      font-size:1.5rem;
+      color:var(--primary);
+      margin:1rem 0;
+    }
+    
+    .invites{
+      margin-top:1.5rem;
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+    }
+    
+    .invite{
+      background:var(--secondary);
+      border-radius:1rem;
+      padding:1rem;
+      transition:transform 0.3s, box-shadow 0.3s;
+      box-shadow:0 5px 15px rgba(0,0,0,0.05);
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .invite:hover {
+      transform:translateY(-5px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+    
+    .invite:before {
+      content:'';
+      position:absolute;
+      width:60px;
+      height:60px;
+      background:rgba(255,255,255,0.2);
+      border-radius:50%;
+      right:-15px;
+      top:-15px;
+    }
+    
+    .invite-title{
+      font-weight:bold;
+      color:#fff;
+      margin-bottom:0.8rem;
+      text-shadow:1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .btn{
+      display:inline-block;
+      background:var(--primary);
+      color:#fff;
+      padding:0.6rem 1.2rem;
+      border:none;
+      border-radius:2rem;
+      font-weight:bold;
+      cursor:pointer;
+      text-decoration:none;
+      transition:all 0.3s;
+      box-shadow:0 3px 10px rgba(255,107,154,0.3);
+    }
+    
+    .btn:hover{ 
+      transform:scale(1.05);
+      box-shadow:0 5px 15px rgba(255,107,154,0.5);
+    }
+    
+    .btn:active {
+      transform:scale(0.98);
+    }
+    
+    .footer-note{
+      font-size:0.85rem;
+      color:var(--text);
+      margin-top:2rem;
+      font-style:italic;
+    }
+    
+    /* Modal */
+    .modal {
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.7);
+      z-index:1000;
+      justify-content:center;
+      align-items:center;
+      animation:fadeIn 0.3s ease;
+    }
+    
+    .modal-content {
+      background:#fff;
+      padding:2rem;
+      border-radius:1rem;
+      width:90%;
+      max-width:400px;
+      text-align:center;
+      position:relative;
+      animation:popIn 0.5s cubic-bezier(0.26, 0.53, 0.74, 1.48);
+    }
+    
+    @keyframes popIn {
+      0% {transform:scale(0.8); opacity:0;}
+      100% {transform:scale(1); opacity:1;}
+    }
+    
+    .close-btn {
+      position:absolute;
+      top:10px;
+      right:15px;
+      font-size:1.5rem;
+      cursor:pointer;
+      color:var(--text);
+      transition:transform 0.3s;
+    }
+    
+    .close-btn:hover {
+      transform:rotate(90deg);
+    }
+    
+    .modal-buttons {
+      display:flex;
+      gap:1rem;
+      margin-top:1.5rem;
+      justify-content:center;
+    }
+    
+    /* Floating hearts animation */
+    .floating-hearts {
+      position:absolute;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:-1;
+    }
+    
+    .heart {
+      position:absolute;
+      font-size:20px;
+      color:var(--primary);
+      opacity:0;
+      animation:floatUp 4s linear infinite;
+    }
+    
+    @keyframes floatUp {
+      0% {transform:translateY(100vh) scale(0.5); opacity:0;}
+      10% {opacity:0.8;}
+      80% {opacity:0.8;}
+      100% {transform:translateY(-20vh) scale(1.2) rotate(20deg); opacity:0;}
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .card {
+        padding:1.5rem;
+      }
+      
+      h1 {
+        font-size:2.2rem;
+      }
+      
+      .btn {
+        padding:0.8rem 1.5rem;
+        font-size:1rem;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create floating hearts
+      createFloatingHearts();
+      
+      // Set up event listeners
+      document.querySelector('.open-btn').addEventListener('click', function() {
+        document.querySelector('.loading-screen').style.opacity = '0';
+        setTimeout(function() {
+          document.querySelector('.loading-screen').style.visibility = 'hidden';
+        }, 800);
+      });
+    });
+    
+    function createFloatingHearts() {
+      const container = document.createElement('div');
+      container.className = 'floating-hearts';
+      document.body.appendChild(container);
+      
+      const heartSymbols = ['❤', '💕', '💖', '💗', '💓'];
+      
+      for (let i = 0; i < 15; i++) {
+        createHeart(container, heartSymbols);
+      }
+    }
+    
+    function createHeart(container, symbols) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDelay = Math.random() * 4 + 's';
+      heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+      container.appendChild(heart);
+      
+      // Remove and recreate heart after animation completes
+      heart.addEventListener('animationend', function() {
+        heart.remove();
+        createHeart(container, symbols);
+      });
+    }
+    
+    function showInviteModal() {
+      const modal = document.getElementById('inviteModal');
+      modal.style.display = 'flex';
+    }
+    
+    function closeModal() {
+      document.getElementById('inviteModal').style.display = 'none';
+    }
+    
+    function accept(invite) {
+      closeModal();
+      
+      // Create confetti effect
+      createConfetti();
+      
+      // Show acceptance message
+      const acceptMessage = document.createElement('div');
+      acceptMessage.className = 'modal';
+      acceptMessage.style.display = 'flex';
+      acceptMessage.innerHTML = `
+        <div class="modal-content">
+          <span class="close-btn" onclick="this.parentElement.parentElement.remove()">×</span>
+          <h2>¡Maravilloso! 🎉</h2>
+          <p>Nos vemos en ${invite} 🌷</p>
+          <p style="font-size:0.7rem">*PD: Todo esto incluye mis besitos.</p>
+          <p style="font-size:1.5rem; margin-top:1rem">💖</p>
+        </div>
+      `;
+      document.body.appendChild(acceptMessage);
+    }
+    
+    function createConfetti() {
+      const colors = ['#ff6b9a', '#ffb6c1', '#ff4d82', '#ffffff', '#ffcce0'];
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.width = '100%';
+      container.style.height = '100%';
+      container.style.top = '0';
+      container.style.left = '0';
+      container.style.pointerEvents = 'none';
+      container.style.zIndex = '1001';
+      document.body.appendChild(container);
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'absolute';
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 5 + 3) + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = -20 + 'px';
+        confetti.style.borderRadius = '50%';
+        confetti.style.opacity = Math.random() + 0.5;
+        container.appendChild(confetti);
+        
+        const duration = Math.random() * 3 + 2;
+        const delay = Math.random() * 2;
+        
+        confetti.animate([
+          { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+          { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ], {
+          duration: duration * 1000,
+          delay: delay * 1000,
+          easing: 'cubic-bezier(0,0,.2,1)'
+        }).onfinish = () => confetti.remove();
+      }
+      
+      setTimeout(() => container.remove(), 5000);
+    }
+  </script>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen">
+    <div class="envelope"></div>
+    <button class="open-btn">Abrir :$</button>
+  </div>
+  
+  <!-- Main Card -->
+  <div class="card">
+    <h1>Para la mejor Mamá & Tens</h1>
+    <p>Por esto no te salude el dia que era :c queria hacer algo bonito pero no alcance xd.</p>
+    <div class="heart-divider">💝</div>
+    <p>Feliz Día de la Madre, Camilita.</p>
+
+        <p>Realmente te admiro profundamente. No solo por ser una mamá que da todo por sus hijos, sino por tener el fuerza de seguir estudiando, de levantarte cada día, y de seguir luchando, aunque a veces parezca que no puedes más.
+        
+        No entiendo cómo puedes con tanto… pero lo haces. Y lo haces con amor.
+        
+        Eres fuerza, ternura juntos. Y aunque no siempre te lo digan, lo que haces vale oro.</p><p>
+             Hoy, y todos los días, mereces que te celebren. 💖</p>
+    <h2>Invitación Especial</h2>
+    <p>Te doy a elegir 2 lugares bonitos para celebrarte.</p>
+    <button class="btn" onclick="showInviteModal()">Ver Invitaciones</button>
+    <p class="footer-note">* No acepto un no como respuesta. 😡💖</p>
+  </div>
+  
+  <!-- Modal for invitations -->
+  <div id="inviteModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">×</span>
+      <h2>¿A dónde te gustaría ir, Cami preciosa?</h2>
+      <p>He preparado dos lugares para celebrarte como te mereces.</p>
+      <p>La fecha que propongo es 13-05-2025 a las 6 o 7PM</p>
+
+      <p>¡Pa comernos algo rico! 💕</p>
+      <div class="invites">
+        <div class="invite">
+          <div class="invite-title"><em>☕️ Brussels</em></div>
+          <p>Comer algo rico, tomarnos un cafecito y conversar sobre la vida.</p>
+          <button class="btn" onclick="accept('el Brussels')">¡Acepto esta cita!</button>
+        </div>
+        <div class="invite">
+          <div class="invite-title"><em>Ramen Kintaro</em></div>
+          <p>O por fin sacarnos las ganas de un ramencito rico.</p>
+          <button class="btn" onclick="accept('Kintaro Ramen')">¡Acepto esta cita!</button>
+        </div>
+      </div>
+      <button class="btn" onclick="accept('AMBOS')" style="margin-top:1.5rem">¡Quiero ambas sorpresas!</button>
+    </div>
+  </div>
+</body>
+</html>
