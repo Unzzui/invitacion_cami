@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>¡Feliz Día de la Madre!</title>
+  <title>¡Feliz Día de la Madre & Día de la Enfermería!</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&family=Dancing+Script:wght@700&display=swap');
     :root{
@@ -310,7 +310,56 @@
       opacity:0;
       animation:floatUp 4s linear infinite;
     }
-    
+      /* Add these new styles for heart animation */
+      .envelope-heart {
+        font-size: 30px;
+        color: var(--accent);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        transition: all 0.8s ease;
+      }
+      
+      .envelope:after {
+        content: '';  /* Remove content from here as we'll use a separate element */
+      }
+      
+      .heart-animate {
+        transform: translate(-50%, -180%) scale(1.5) rotate(360deg);
+        opacity: 0;
+      }
+      
+      /* Sound control styles */
+      .sound-control {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        font-size: 20px;
+      }
+
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
     @keyframes floatUp {
       0% {transform:translateY(100vh) scale(0.5); opacity:0;}
       10% {opacity:0.8;}
@@ -332,6 +381,7 @@
         padding:0.8rem 1.5rem;
         font-size:1rem;
       }
+
     }
   </style>
   <script>
@@ -446,6 +496,60 @@
       
       setTimeout(() => container.remove(), 5000);
     }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create floating hearts
+      createFloatingHearts();
+      
+      // Create heart inside envelope
+      const envelopeEl = document.querySelector('.envelope');
+      const heartEl = document.createElement('div');
+      heartEl.className = 'envelope-heart';
+      heartEl.textContent = '❤';
+      envelopeEl.appendChild(heartEl);
+      
+      // Add background music
+      const audioEl = document.createElement('audio');
+      audioEl.src = "https://audio-variant-previews.envatousercontent.com/Web/12/4e/9f/1d/4b/v1_E11/E111DGVL.mp3"; // Sample love song
+      audioEl.loop = true;
+      audioEl.muted = true;
+      document.body.appendChild(audioEl);
+      
+      // Create sound control
+      const soundControl = document.createElement('div');
+      soundControl.className = 'sound-control';
+      soundControl.innerHTML = '🔇';
+      soundControl.addEventListener('click', function() {
+        if (audioEl.muted) {
+          audioEl.muted = false;
+          soundControl.innerHTML = '🔊';
+        } else {
+          audioEl.muted = true;
+          soundControl.innerHTML = '🔇';
+        }
+      });
+      document.body.appendChild(soundControl);
+      
+      // Set up event listeners
+      document.querySelector('.open-btn').addEventListener('click', function() {
+        // Play audio
+        audioEl.play();
+        
+        // Animate heart
+        heartEl.classList.add('heart-animate');
+        
+        // Show envelope opening animation
+        document.querySelector('.envelope').classList.add('envelope-open');
+        
+        // Fade out loading screen
+        setTimeout(function() {
+          document.querySelector('.loading-screen').style.opacity = '0';
+          setTimeout(function() {
+            document.querySelector('.loading-screen').style.visibility = 'hidden';
+          }, 800);
+        }, 600); // Delay the fade out to show the heart animation
+      });
+    });
+
   </script>
 </head>
 <body>
@@ -471,6 +575,140 @@
     <h2>Invitación Especial</h2>
     <p>Te doy a elegir 2 lugares bonitos para celebrarte.</p>
     <button class="btn" onclick="showInviteModal()">Ver Invitaciones</button>
+   <!-- Add this after the invitation button -->
+<button class="gift-btn" onclick="showGiftSurprise()">
+  <span class="gift-icon">🎁</span>
+  <span class="gift-text">Abrir Regalo Secreto 🥺</span>
+</button>
+
+<style>
+.gift-btn {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #ffd6e1, var(--primary));
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 5px 15px rgba(255,107,154,0.3);
+}
+
+.gift-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(255,107,154,0.4);
+}
+
+.gift-btn:active {
+  transform: scale(0.98);
+}
+
+.gift-icon {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1.2rem;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
+}
+
+.gift-text {
+  position: relative;
+  z-index: 1;
+}
+
+.gift-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.7s;
+}
+
+.gift-btn:hover::after {
+  left: 100%;
+}
+
+.virtual-gift {
+  text-align: center;
+}
+
+.gift-voucher {
+  background: linear-gradient(135deg, #fff9f9, #fff4f8);
+  border: 2px dashed var(--primary);
+  border-radius: 10px;
+  padding: 1.5rem;
+  position: relative;
+  margin: 1rem 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.gift-voucher::before {
+  content: '✂';
+  position: absolute;
+  top: -15px;
+  left: 20px;
+  background: white;
+  padding: 0 10px;
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+.gift-code {
+  background: rgba(255,255,255,0.7);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: monospace;
+  letter-spacing: 2px;
+  color: var(--accent);
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+</style>
+
+<script>
+function showGiftSurprise() {
+  // Create and show gift modal
+  const giftModal = document.createElement('div');
+  giftModal.className = 'modal';
+  giftModal.style.display = 'flex';
+  
+  giftModal.innerHTML = `
+  <div class="modal-content">
+  <span class="close-btn" onclick="this.parentElement.parentElement.remove()">×</span>
+  <h2>¡Un Regalo Especial Para Ti! 🎀</h2>
+  <div class="virtual-gift">
+    <p>Regalo Obligatorio...</p>
+    <div class="gift-voucher">
+      <h3>Certificado de Regalo</h3>
+      <p>Este cupón es válido para:</p>
+      <p><strong>Una Tarde Completa de Cariñito y Regaloneo</strong></p>
+      <p>Perdernos en un lugar de Santiago los 2 solos.</p>
+      <div class="gift-code">DIEGO-ME-CAES-MAL-2025</div>
+      <p class="small-text">*Válido cuando quieras. Solo muéstrame este código.</p>
+    </div>
+    <p>¡Tienes que Canjearlo sí o sí! 💖</p>
+  </div>
+</div>
+
+  `;
+  
+  document.body.appendChild(giftModal);
+  
+  // Add confetti effect
+  createConfetti();
+}
+</script>
     <p class="footer-note">* No acepto un no como respuesta. 😡💖</p>
   </div>
   
@@ -493,9 +731,12 @@
           <div class="invite-title"><em>Ramen Kintaro</em></div>
           <p>O por fin sacarnos las ganas de un ramencito rico.</p>
           <button class="btn" onclick="accept('Kintaro Ramen')">¡Acepto esta cita!</button>
+        
         </div>
       </div>
-      <button class="btn" onclick="accept('AMBOS y algo más 🤫😳')" style="margin-top:1.5rem">¡Quiero ambas sorpresas!</button>
+      
+  
+      <button class="btn" onclick="accept('AMBOS')" style="margin-top:1.5rem">¡Quiero ambas sorpresas!</button>
     </div>
   </div>
 </body>
