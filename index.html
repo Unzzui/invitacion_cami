@@ -551,6 +551,190 @@
     });
 
   </script>
+  <style>
+    /* Añade estos estilos */
+    .celebration-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+      animation: pulse 1s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.2); }
+    }
+    
+    .surprise-text {
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 0 auto;
+      border-right: 2px solid var(--primary);
+      animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+    
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--primary) }
+    }
+    </style>
+    
+    <script>
+    function accept(invite) {
+      closeModal();
+      
+      // Create confetti effect
+      createConfetti();
+      
+      // Set icon based on selection
+      let icon = '🎉';
+      if (invite.includes('Brussels')) {
+        icon = '☕️';
+      } else if (invite.includes('Kintaro')) {
+        icon = '🍜';
+      } else if (invite.includes('AMBOS')) {
+        icon = '✨';
+      }
+      
+      // Show acceptance message with themed animation
+      const acceptMessage = document.createElement('div');
+      acceptMessage.className = 'modal';
+      acceptMessage.style.display = 'flex';
+      acceptMessage.innerHTML = `
+        <div class="modal-content">
+          <span class="close-btn" onclick="this.parentElement.parentElement.remove(); showDateDetails('${invite}')">×</span>
+          <div class="celebration-icon">${icon}</div>
+          <h2>¡Maravilloso! 🎉</h2>
+          <p class="surprise-text">Nos vemos en ${invite} 🌷</p>
+          <p style="font-size:0.7rem">*PD: Todo esto incluye mis besitos.</p>
+          <p style="font-size:1.5rem; margin-top:1rem">💖</p>
+        </div>
+      `;
+      document.body.appendChild(acceptMessage);
+    }
+    
+    function showDateDetails(invite) {
+      // Create countdown container if it doesn't exist
+      if (!document.querySelector('.date-details')) {
+        const dateDetails = document.createElement('div');
+        dateDetails.className = 'date-details';
+        dateDetails.innerHTML = `
+          <h3>Nuestra Cita 💕</h3>
+          <div class="date-countdown">
+            <div class="countdown-header">Faltan:</div>
+            <div class="countdown-timer">
+              <div class="time-unit">
+                <span id="days">0</span>
+                <span class="unit-label">Días</span>
+              </div>
+              <div class="time-unit">
+                <span id="hours">0</span>
+                <span class="unit-label">Horas</span>
+              </div>
+              <div class="time-unit">
+                <span id="minutes">0</span>
+                <span class="unit-label">Min</span>
+              </div>
+              <div class="time-unit">
+                <span id="seconds">0</span>
+                <span class="unit-label">Seg</span>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Insert before footer note
+        const footerNote = document.querySelector('.footer-note');
+        footerNote.parentNode.insertBefore(dateDetails, footerNote);
+        
+        // Add styles dynamically
+        const styleEl = document.createElement('style');
+        styleEl.textContent = `
+          .date-details {
+            margin: 2rem auto 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, #fff5f8, #fff);
+            border-radius: 15px;
+            border: 2px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(255,107,154,0.2);
+            animation: fadeInSlide 0.8s ease;
+          }
+          
+          .date-countdown {
+            margin-top: 1rem;
+          }
+          
+          .countdown-header {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+          }
+          
+          .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+          }
+          
+          .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            min-width: 45px;
+            color: white;
+          }
+          
+          .time-unit span:first-child {
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+          
+          .unit-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+          }
+        `;
+        document.head.appendChild(styleEl);
+        
+        // Start countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+    }
+    
+    function updateCountdown() {
+      // Target date: May 13, 2025 at 6:00 PM
+      const targetDate = new Date('2025-05-13T18:00:00');
+      const now = new Date();
+      const diff = targetDate - now;
+      
+      if (diff <= 0) {
+        document.getElementById('days').textContent = '0';
+        document.getElementById('hours').textContent = '0';
+        document.getElementById('minutes').textContent = '0';
+        document.getElementById('seconds').textContent = '0';
+        return;
+      }
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      document.getElementById('minutes').textContent = minutes;
+      document.getElementById('seconds').textContent = seconds;
+    }
+    </script>
+    
 </head>
 <body>
   <!-- Loading Screen -->
@@ -575,7 +759,7 @@
     <h2>Invitación Especial</h2>
     <p>Te doy a elegir 2 lugares bonitos para celebrarte.</p>
     <button class="btn" onclick="showInviteModal()">Ver Invitaciones</button>
-   <!-- Add this after the invitation button -->
+    
 <button class="gift-btn" onclick="showGiftSurprise()">
   <span class="gift-icon">🎁</span>
   <span class="gift-text">Abrir Regalo Secreto 🥺</span>
@@ -709,6 +893,7 @@ function showGiftSurprise() {
   createConfetti();
 }
 </script>
+
     <p class="footer-note">* No acepto un no como respuesta. 😡💖</p>
   </div>
   
@@ -739,5 +924,6 @@ function showGiftSurprise() {
       <button class="btn" onclick="accept('AMBOS')" style="margin-top:1.5rem">¡Quiero ambas sorpresas!</button>
     </div>
   </div>
+  
 </body>
 </html>
